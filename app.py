@@ -82,7 +82,10 @@ def index():
         if error_message == "":
             make_pdf()
             print("PDF built")
-            return send_from_directory("tmp","main.pdf", as_attachment=True)
+            try:
+                return send_file("tmp/main.pdf", as_attachment=True)
+            except FileNotFoundError:
+                print("PDF not found")
 
 
     if error_message != "":
