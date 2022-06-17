@@ -2,7 +2,7 @@ import os
 import datetime
 import json
 
-from flask import Flask, flash, render_template, request
+from flask import Flask, send_file, send_from_directory, render_template, request
 from werkzeug.utils import secure_filename
 
 from make_pdf import make_pdf
@@ -40,6 +40,12 @@ def index():
     vars["today"] = today.strftime("%B %d, %Y")
     error_message = ""
     if request.method == "POST":
+        # Create temp directory
+        try:
+            os.mkdir("tmp")
+        except FileExistsError:
+            pass
+
         # Handle the cover image upload
         file = request.files["coverImage"]
         if file.filename != "":
@@ -48,7 +54,7 @@ def index():
             filename = request.form["fileName"]
         else:
             filename = ""
-            error_message+="No cover image selected\n"
+            error_message += "No cover image selected\n"
         vars["fileName"] = filename
 
         filetype = filename.split(".")[-1]
@@ -59,12 +65,12 @@ def index():
 
         # Check if subject has been selected
         if request.form["subjectSelect"] == "Choose subject...":
-            error_message+="Please select a subject\n"
+            error_message += "Please select a subject\n"
 
         # Check length of abstract
         abstract = request.form["abstractText"]
         if len(abstract) > 400:
-            error_message+="Abstract is too long\n"
+            error_message += "Abstract is too long\n"
 
         if error_message == "":
             with open(os.path.join("tmp", "metadata.json"), "w") as f:
@@ -72,8 +78,12 @@ def index():
                 metadata["fileName"] = filename
                 json.dump(metadata, f, indent=2)
 
+        # Make the PDF, and download it
         if error_message == "":
             make_pdf()
+            print("PDF built")
+            return send_from_directory("tmp","main.pdf", as_attachment=True)
+
 
     if error_message != "":
         vars["error_message"] = error_message
