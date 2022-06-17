@@ -141,6 +141,8 @@ def make_pdf():
         capture_output=True,
         cwd=TMP_LOCATION,
     )
+    print("logs:")
+    print(tex_log)
 
 
 if __name__ == "__main__":

@@ -82,6 +82,7 @@ def index():
         if error_message == "":
             make_pdf()
             print("PDF built")
+            print(os.listdir("tmp"))
             try:
                 return send_file("tmp/main.pdf", as_attachment=True)
             except FileNotFoundError:
