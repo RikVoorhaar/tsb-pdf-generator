@@ -121,7 +121,7 @@ def _make_affiliations_text(affiliations):
     out += "\n" + r"{\footnotesize "
     for key, affiliation in affiliations.items():
         out += r"${}^" + key + r"$: " + affiliation + r"\\ "
-    out += r"}\\"
+    out += r"}"
     return out
 
 
@@ -136,13 +136,24 @@ def make_pdf():
     )
 
     # Now we can compile the tex-file
+    print("Compiling PDF...")
     tex_log = subprocess.run(
         ["latexmk", "-pdf", "-interaction=nonstopmode", "main.tex"],
         capture_output=True,
         cwd=TMP_LOCATION,
     )
-    print("logs:")
-    print(tex_log)
+    num_errors = 0
+    for line in tex_log.stdout.decode("utf-8").split("\n"):
+        if line.startswith("!"):
+            print("\n")
+            print(line)
+            print("\n")
+            num_errors += 1
+    if num_errors > 0:
+        print("Some errors were encountered with latex. Entire log:")
+        print(tex_log.stdout.decode("utf-8"))
+    else:
+        print("PDF compiled without errors!")
 
 
 if __name__ == "__main__":
