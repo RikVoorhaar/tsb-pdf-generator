@@ -1,0 +1,73 @@
+\documentclass[11pt,a4]{article}
+\usepackage{graphicx}
+\usepackage{helvet}
+\usepackage{adjustbox}
+
+\usepackage[margin=1cm,top=2.5cm,bottom=2cm,headsep=15mm]{geometry}
+\usepackage{multicol}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\includegraphics[height=0.6cm]{assets/right-header-image.png}\vspace{0.5ex}}
+\lhead{\includegraphics[height=1.2cm]{assets/left-header-image.png}}
+\rfoot{\thepage}
+\lfoot{TheScienceBreaker $\mid$ Science meets society}
+\renewcommand{\footrulewidth}{0.8pt}
+\renewcommand{\headrulewidth}{0.8pt}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{AuthorColor}{HTML}{FF6D3B}
+\definecolor{SubjectColor}{HTML}{73C5D3}
+
+
+\usepackage[parfill]{parskip}
+\graphicspath{ {../} }
+\usepackage{caption}
+\captionsetup{labelformat=empty}
+
+\setlength{\columnsep}{2em}
+
+
+\begin{document}
+
+\fontfamily{phv}\selectfont
+
+\begin{flushright}\footnotesize \VAR{date} \end{flushright}\vspace{-2ex}
+
+{\textcolor{SubjectColor}{\large \textbf{\VAR{subjectSelect}}}}
+
+
+{{\huge \textbf{\VAR{subjectTitle}}}}
+
+
+\vspace{-0.5ex}{\small \VAR{authorText}}
+
+
+{\footnotesize \VAR{affiliationText}}
+{\footnotesize This Break was edited by \textit{\VAR{editorName}}, Scientific Editor --- TheScienceBreaker}
+
+
+\vspace{1ex}
+\begin{adjustbox}{minipage=0.9\textwidth,center}
+\textit{\footnotesize \textcolor{darkgray}{
+\VAR{abstractText}
+}}
+\end{adjustbox}
+
+\begin{figure*}[h!]
+\begin{center}
+\includegraphics[width=0.8\textwidth, height=7cm, keepaspectratio]{tmp/\VAR{fileName}}
+\caption{\textcolor{darkgray}{\textit{\footnotesize \fontfamily{phv}\selectfont 
+Image credits: \VAR{imageCredits}}
+}}
+\end{center}
+\end{figure*}
+
+\begin{multicols}{2}
+\fontfamily{cmr}\selectfont
+
+\VAR{mainText}
+
+\end{multicols}
+
+\end{document}
