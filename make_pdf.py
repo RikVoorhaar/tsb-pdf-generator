@@ -38,7 +38,7 @@ def make_tex(preamb_file, metadata_file):
     main_file = "tmp/main.tex"
 
     with open(metadata_file, "r") as f:
-        metadata = json.load(f)
+        metadata = json.load(f) 
 
     template = latex_jinja_env.get_template(TEMPLATE_LOCATION)
 
