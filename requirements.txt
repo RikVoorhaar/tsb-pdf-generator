@@ -1,3 +1,7 @@
 flask
 python-dotenv
+jinja2
+pandoc
 gunicorn
+black
+pycodestyle
