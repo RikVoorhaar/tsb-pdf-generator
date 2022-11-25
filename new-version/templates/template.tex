@@ -1,7 +1,10 @@
 \documentclass[11pt,a4]{article}
 \usepackage{graphicx}
+\usepackage[expansion,kerning]{microtype}
 \usepackage{helvet}
 \usepackage{adjustbox}
+\usepackage{csquotes}
+\MakeOuterQuote{"}
 
 \usepackage[margin=1cm,top=2.5cm,bottom=2cm,headsep=15mm]{geometry}
 \usepackage{multicol}
@@ -19,8 +22,18 @@
 \definecolor{AuthorColor}{HTML}{FF6D3B}
 \definecolor{SubjectColor}{HTML}{73C5D3}
 
+\usepackage[urlcolor=AuthorColor]{hyperref}
+\hypersetup{
+    colorlinks=true,
+    urlcolor=AuthorColor
+}
 
-\usepackage[parfill]{parskip}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\newif\ifimage
+
+\usepackage[parfill, skip=5pt]{parskip}
 \graphicspath{ {../} }
 \usepackage{caption}
 \captionsetup{labelformat=empty}
@@ -37,10 +50,10 @@
 {\textcolor{SubjectColor}{\large \textbf{\VAR{subjectSelect}}}}
 
 
-{{\huge \textbf{\VAR{subjectTitle}}}}
+\maxsizebox{\textwidth}{10cm}{\mbox{\huge \textbf{\VAR{subjectTitle}}}}
 
 
-\vspace{-0.5ex}{\small \VAR{authorText}}
+{\small \VAR{authorText}}
 
 
 {\footnotesize \VAR{affiliationText}}
@@ -50,22 +63,30 @@
 \vspace{1ex}
 \begin{adjustbox}{minipage=0.9\textwidth,center}
 \textit{\footnotesize \textcolor{darkgray}{
-\VAR{abstractText}
-}}
+\VAR{abstractText} }}
 \end{adjustbox}
 
-\begin{figure*}[h!]
-\begin{center}
-\includegraphics[width=0.8\textwidth, height=7cm, keepaspectratio]{tmp/\VAR{fileName}}
-\caption{\textcolor{darkgray}{\textit{\footnotesize \fontfamily{phv}\selectfont 
-Image credits: \VAR{imageCredits}}
-}}
-\end{center}
-\end{figure*}
+\VAR{useImage}
+\ifimage
+    \begin{figure*}[h!]
+    \begin{center}
+    \includegraphics[width=0.8\textwidth, height=7cm, keepaspectratio]{tmp/\VAR{fileName}}
+    \vspace{-7pt}
+    \caption{\textcolor{darkgray}{\footnotesize 
+    % \fontfamily{phv}\selectfont 
+    \textit{Image credits:} \VAR{imageCredits}
+    }}
+    \end{center}
+    \end{figure*}
+\fi
 
 \begin{multicols}{2}
 \fontfamily{cmr}\selectfont
 \VAR{mainText}
 \end{multicols}
+
+\textbf{Original article:}\\
+{\fontfamily{cmr}\selectfont
+\VAR{citation}}
 
 \end{document}

@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{helvet}
 \usepackage{adjustbox}
+\usepackage[expansion,protrusion=true,kerning]{microtype}
 
 \usepackage[margin=1cm,top=2.5cm,bottom=2cm,headsep=15mm]{geometry}
 \usepackage{multicol}
@@ -37,21 +38,20 @@
 {\textcolor{SubjectColor}{\large \textbf{\VAR{subjectSelect}}}}
 
 
-{{\huge \textbf{\VAR{subjectTitle}}}}
+{\mbox{\huge \textbf{\VAR{subjectTitle}}}}
 
 
 \vspace{-0.5ex}{\small \VAR{authorText}}
 
 
 {\footnotesize \VAR{affiliationText}}
-{\footnotesize This Break was edited by \textit{\VAR{editorName}}, Scientific Editor --- TheScienceBreaker}
+{\footnotesize This Break was edited by \textit{\VAR{editorName}} --- TheScienceBreaker}
 
 
 \vspace{1ex}
 \begin{adjustbox}{minipage=0.9\textwidth,center}
 \textit{\footnotesize \textcolor{darkgray}{
-\VAR{abstractText}
-}}
+\VAR{abstractText}}}
 \end{adjustbox}
 
 \begin{figure*}[h!]
