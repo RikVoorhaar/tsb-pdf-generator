@@ -6,3 +6,4 @@ gunicorn
 black
 pycodestyle
 requests
+tqdm
