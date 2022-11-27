@@ -1,9 +1,10 @@
-flask
-python-dotenv
-jinja2
-pandoc
-gunicorn
 black
+flask
+gunicorn
+jinja2
+natsort
+pandoc
 pycodestyle
+python-dotenv
 requests
 tqdm

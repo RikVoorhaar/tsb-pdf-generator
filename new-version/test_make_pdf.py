@@ -6,6 +6,7 @@ import json
 import logging
 from pathlib import Path
 
+import natsort
 from tqdm import tqdm
 
 from make_pdf import make_pdf
@@ -36,11 +37,13 @@ def test_json(data):
 
 
 # %%
-json_file = Path("json") / "break_70.json"
+json_file = Path("json") / "break_479.json"
 data = json.loads(json_file.read_text())
 test_json(data)
 # %%
-for f in tqdm(files):
+files_sorted = natsort.natsorted(files)
+
+for f in tqdm(files_sorted):
     data = json.loads(f.read_text())
     test_json(data)
 

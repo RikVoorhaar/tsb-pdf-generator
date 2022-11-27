@@ -3,17 +3,20 @@
 \usepackage{microtype}
 \usepackage{helvet}
 \usepackage{adjustbox}
+\usepackage{verbatim}
 \usepackage{fontspec}
+\usepackage[normalem]{ulem}
 \setmainfont{Liberation Serif}
 \setsansfont{Liberation Sans}
-\usepackage{csquotes}
-\MakeOuterQuote{"}
+% \usepackage{csquotes}
+% \MakeOuterQuote{"}
 
 \usepackage[margin=1cm,top=2.5cm,bottom=2cm,headsep=15mm]{geometry}
 \usepackage{multicol}
 % \usepackage[utf8x]{inputenc}
 % \usepackage[T1]{fontenc}
 \usepackage{fancyhdr}
+\usepackage{caption}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\includegraphics[height=0.6cm]{assets/right-header-image.png}\vspace{0.5ex}}
@@ -98,6 +101,7 @@
 \ifimage
     \begin{figure*}[h!]
     \begin{center}
+    \captionsetup{width = .7\textwidth}
     \includegraphics[width=0.8\textwidth, height=7cm, keepaspectratio]{tmp/\VAR{fileName}}
     \vspace{-10pt}
     \caption{\textcolor{darkgray}{

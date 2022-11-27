@@ -54,8 +54,11 @@ def html_to_latex(html_text):
     return result.rstrip()
 
 
-def escape_ampersand(string):
-    return string.replace("&", "\\&")
+def escape_chars(s):
+    s = s.replace("&", r"\&")
+    s = s.replace("_", r"\_")
+    s = s.replace("%", r"\%")
+    return s
 
 
 def _make_authors_text(authors):
@@ -64,14 +67,14 @@ def _make_authors_text(authors):
     out += "\n" + r"\vspace{-1ex}{by " + "\small"
     for i, author in enumerate(authors):
         out += r"\textbf{\textcolor{AuthorColor}{\small "
-        out += author["name"]
+        out += escape_chars(author["name"])
         out += "}}"
 
         out += r"$^{"
-        out += str(author["affiliation"])
+        out += escape_chars(str(author["affiliation"]))
         out += r"}$ "
 
-        out += author["title"]
+        out += escape_chars(author["title"])
 
         if i != len(authors) - 1:
             out += r" $\mid$ "
@@ -102,21 +105,34 @@ def _process_authors(authors):
 def _make_affiliations_text(affiliations):
     """Insert the affiliations into the main file"""
     out = ""
-    out += "\n" + r"{"
+    out += r"{"
     for affiliation, affil_id in affiliations.items():
-        out += r"${}^" + str(affil_id) + r"$: " + affiliation + r"\\ "
+        out += (
+            r"${}^"
+            + str(affil_id)
+            + r"$: "
+            + escape_chars(affiliation)
+            + r" \\ "
+        )
     out += r"}"
     return out
 
 
+def fix_emph_quote_bug(text):
+    text = text.replace(r'" ', r"\textquotedbl{} ")
+    text = text.replace(r'"', r"\textquotedbl ")
+    return text
+
+
 def _get_img(data):
+    tmp = Path("tmp")
     image_name = Path(data["image_path"]).name
     image_path = data["image_path"]
     if not image_path.startswith("http"):
         img_url = "https://thesciencebreaker.org/" + data["image_path"]
     else:
         img_url = image_path
-    img_filename = Path("tmp") / image_name
+    img_filename = tmp / image_name
     if img_filename.exists():
         logging.info("Image already downloaded, skipping")
         return image_name, 200
@@ -127,6 +143,9 @@ def _get_img(data):
     if resp.status_code == 200:
         with open(img_filename, "wb") as f:
             f.write(resp.content)
+        subprocess.run(
+            ["convert", img_filename, "-colorspace", "RGB", img_filename],
+        )
 
     return image_name, resp.status_code
 
@@ -134,7 +153,9 @@ def _get_img(data):
 def process_data(data):
     template_data = {}
 
-    template_data["mainText"] = html_to_latex(data["content"])
+    template_data["mainText"] = fix_emph_quote_bug(
+        html_to_latex(data["content"])
+    )
     template_data["subjectTitle"] = html_to_latex(data["title"])
     template_data["abstractText"] = html_to_latex(data["description"])
     if len(template_data["abstractText"]) > 0:
@@ -148,8 +169,8 @@ def process_data(data):
     template_data["subjectSelect"] = CAT_ID_TO_NAME[data["category_id"]]
 
     authors, affiliations = _process_authors(data["authors"])
-    template_data["authorText"] = escape_ampersand(_make_authors_text(authors))
-    template_data["affiliationText"] = escape_ampersand(_make_affiliations_text(affiliations))
+    template_data["authorText"] = _make_authors_text(authors)
+    template_data["affiliationText"] = _make_affiliations_text(affiliations)
     template_data["editorName"] = f"scientific editor \# {data['editor_id']}"
 
     template_data["fileName"], status_code = _get_img(data)
@@ -157,7 +178,7 @@ def process_data(data):
         template_data["useImage"] = "\imagefalse"
     else:
         template_data["useImage"] = "\imagetrue"
-    template_data["imageCredits"] = data["image_credits"]
+    template_data["imageCredits"] = html_to_latex(data["image_credits"])
 
     template_data["citation"] = html_to_latex(data["original_article"])
     return template_data
