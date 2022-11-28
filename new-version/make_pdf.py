@@ -1,10 +1,5 @@
-# %%
-"""We need to convert the HTML tags to LaTeX instructions. I think it's best to
-just make a long list of all the tags we can find in the articles, and then
-manually convert them. (Or find something online). From that point onward, if we
-can't recognize a tag we need to ignore it, but also somehow log this result."""
-
 import logging
+import os
 import re
 import subprocess
 from datetime import datetime
@@ -14,6 +9,7 @@ import jinja2
 import pandoc
 import requests
 
+# Map category ID to correct names
 CAT_ID_TO_NAME = {
     1: "Health \& Physiology",
     2: "Neurobiology",
@@ -43,6 +39,7 @@ LATEX_JINJA_ENV = jinja2.Environment(
 
 
 def html_to_latex(html_text):
+    """Convert HTML to LaTeX using pandoc"""
     if html_text is None:
         return ""
     Path("tmp").mkdir(exist_ok=True)
@@ -56,6 +53,7 @@ def html_to_latex(html_text):
 
 
 def escape_chars(s):
+    """Escape characters that are special in LaTeX"""
     s = s.replace("&", r"\&")
     s = s.replace("_", r"\_")
     s = s.replace("%", r"\%")
@@ -92,6 +90,7 @@ def _make_authors_text(authors):
 
 
 def _process_authors(authors):
+    """Process the authors and affiliations"""
     affiliations = {}
     author_dicts = []
     affil_counter = 1
@@ -126,19 +125,28 @@ def _make_affiliations_text(affiliations):
     return out
 
 
-def fix_emph_quote_bug(text):
+def force_straight_quotes(text):
+    """
+    Enforce straight quotes to avoid issues with unmatched quotes
+    """
     text = text.replace(r'" ', r"\textquotedbl{} ")
     text = text.replace(r'"', r"\textquotedbl ")
     return text
 
 
 def remove_hypertarget(text):
+    """
+    Fixes bug with brk611 which has an embedded video.
+
+    This removes the video entirely.
+    """
     text = re.sub(r"\\hypertarget{.*?}", "", text)
     text = re.sub(r"\\includegraphics{.*?}", "", text)
     return text
 
 
 def _get_img(data):
+    """Download and save the image from the article"""
     tmp = Path("tmp")
     image_name = Path(data["image_path"]).name
     image_path = data["image_path"]
@@ -165,14 +173,20 @@ def _get_img(data):
 
 
 def process_data(data):
+    """
+    Process the data from the API to make it ready for the LaTeX template.
+    """
     template_data = {}
 
     main_text = html_to_latex(data["content"])
-    main_text = fix_emph_quote_bug(main_text)
+    main_text = force_straight_quotes(main_text)
     main_text = remove_hypertarget(main_text)
     template_data["mainText"] = main_text
 
-    template_data["subjectTitle"] = html_to_latex(data["title"])
+    title = escape_chars(data["title"].replace("\n", " "))
+    template_data["subjectTitle"] = title
+    logging.info(f"Title: {title}")
+    logging.info(f"DOI: {data['doi']}")
     template_data["abstractText"] = html_to_latex(data["description"])
     if len(template_data["abstractText"]) > 0:
         template_data["useAbstract"] = r"\abstracttrue"
@@ -201,6 +215,9 @@ def process_data(data):
 
 
 def make_latex(template_data):
+    """
+    Make the latex file from the template and the data
+    """
     tmp = Path("tmp")
     main_file = tmp / "main.tex"
     template = LATEX_JINJA_ENV.get_template(TEMPLATE_PATH.as_posix())
@@ -210,27 +227,33 @@ def make_latex(template_data):
 
 
 def make_pdf(data):
+    """Make the pdf from the json file"""
     tmp = Path("tmp")
-    logging.info("processing data")
+    tmp.mkdir(exist_ok=True)
+    pdf_folder = Path("pdf")
+    pdf_folder.mkdir(exist_ok=True)
+
+    logging.info("Processing data")
     template_data = process_data(data)
-    logging.info("making LaTeX")
+    logging.info("Making LaTeX")
     make_latex(template_data)
 
     # Now we can compile the tex-file
-    logging.info("Compiling PDF...")
+    logging.info("Compiling PDF")
     tex_log = subprocess.run(
-        # ["latexmk", "-pdf", "-interaction=nonstopmode", "main.tex"],
-        ["xelatex", "-interaction=nonstopmode", "main.tex"],
+        ["xelatex", "-interaction=nonstopmode","-papersize=a4", "main.tex"],
         capture_output=True,
         cwd=tmp,
     )
     num_errors = 0
     for line in tex_log.stdout.decode("utf-8").split("\n"):
         if line.startswith("!"):
-            logging.log(logging.ERROR, line)
+            logging.error("LaTeX error: " + line)
             num_errors += 1
     logging.info("Done compiling PDF, %d errors", num_errors)
-    return 0 if num_errors == 0 else 1
 
+    pdf_name = f"{data['slug']}.pdf"
+    pdf_filename = pdf_folder / pdf_name
+    os.rename(tmp / "main.pdf", pdf_filename)
 
-# %%
+    return pdf_filename.as_posix()

@@ -1,6 +1,6 @@
 black
 flask
-gunicorn
+flask_api
 jinja2
 natsort
 pandoc

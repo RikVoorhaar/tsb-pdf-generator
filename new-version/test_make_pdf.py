@@ -27,7 +27,7 @@ files = list(Path("json").glob("*.json"))
 def test_json(data):
     logger.info("\n" + "-" * 80)
     logger.info(f"Testing {data['id']}")
-    logger.info(f"Doi: {data['doi']}")
+    # logger.info(f"Doi: {data['doi']}")
 
     try:
         _ = make_pdf(data)
@@ -49,3 +49,4 @@ for f in tqdm(files_sorted):
 
 # %%
 # %%
+data["slug"]
