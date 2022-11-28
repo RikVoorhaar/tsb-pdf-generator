@@ -4,10 +4,11 @@ just make a long list of all the tags we can find in the articles, and then
 manually convert them. (Or find something online). From that point onward, if we
 can't recognize a tag we need to ignore it, but also somehow log this result."""
 
+import logging
+import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
-import logging
 
 import jinja2
 import pandoc
@@ -58,6 +59,13 @@ def escape_chars(s):
     s = s.replace("&", r"\&")
     s = s.replace("_", r"\_")
     s = s.replace("%", r"\%")
+    s = s.replace("$", r"\$")
+    s = s.replace("#", r"\#")
+    s = s.replace("{", r"\{")
+    s = s.replace("}", r"\}")
+    s = s.replace("^", r"\textasciicircum{}")
+    s = s.replace("[", "\[")
+    s = s.replace("]", "\]")
     return s
 
 
@@ -124,6 +132,12 @@ def fix_emph_quote_bug(text):
     return text
 
 
+def remove_hypertarget(text):
+    text = re.sub(r"\\hypertarget{.*?}", "", text)
+    text = re.sub(r"\\includegraphics{.*?}", "", text)
+    return text
+
+
 def _get_img(data):
     tmp = Path("tmp")
     image_name = Path(data["image_path"]).name
@@ -153,9 +167,11 @@ def _get_img(data):
 def process_data(data):
     template_data = {}
 
-    template_data["mainText"] = fix_emph_quote_bug(
-        html_to_latex(data["content"])
-    )
+    main_text = html_to_latex(data["content"])
+    main_text = fix_emph_quote_bug(main_text)
+    main_text = remove_hypertarget(main_text)
+    template_data["mainText"] = main_text
+
     template_data["subjectTitle"] = html_to_latex(data["title"])
     template_data["abstractText"] = html_to_latex(data["description"])
     if len(template_data["abstractText"]) > 0:

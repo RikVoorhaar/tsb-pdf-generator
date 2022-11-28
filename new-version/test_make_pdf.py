@@ -30,14 +30,14 @@ def test_json(data):
     logger.info(f"Doi: {data['doi']}")
 
     try:
-        latex_errors = make_pdf(data)
+        _ = make_pdf(data)
     except Exception as e:
         logging.error(f"Error: {e}")
         raise
 
 
 # %%
-json_file = Path("json") / "break_479.json"
+json_file = Path("json") / "break_720.json"
 data = json.loads(json_file.read_text())
 test_json(data)
 # %%
