@@ -1,9 +1,9 @@
 \documentclass[11pt,a4]{article}
 \usepackage{graphicx}
 \usepackage{microtype}
-\usepackage{helvet}
+% \usepackage{helvet}
 \usepackage{adjustbox}
-\usepackage{verbatim}
+% \usepackage{verbatim}
 \usepackage{fontspec}
 \usepackage[normalem]{ulem}
 \setmainfont{Liberation Serif}
@@ -15,8 +15,10 @@
 \usepackage{multicol}
 % \usepackage[utf8x]{inputenc}
 % \usepackage[T1]{fontenc}
-\usepackage{fancyhdr}
 \usepackage{caption}
+\captionsetup{labelformat=empty}
+
+\usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\includegraphics[height=0.6cm]{assets/right-header-image.png}\vspace{0.5ex}}
@@ -45,8 +47,6 @@
 
 \usepackage[parfill, skip=5pt]{parskip}
 \graphicspath{ {../} }
-\usepackage{caption}
-\captionsetup{labelformat=empty}
 
 \setlength{\columnsep}{2em}
 

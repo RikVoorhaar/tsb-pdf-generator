@@ -1,0 +1,25 @@
+2022-11-29 15:03:04,194 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2022-11-29 15:03:04,194 - INFO - [33mPress CTRL+C to quit[0m
+2022-11-29 15:03:19,275 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:19] "GET / HTTP/1.1" 200 -
+2022-11-29 15:03:23,388 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:23] "[33mGET /logs HTTP/1.1[0m" 404 -
+2022-11-29 15:03:25,310 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:25] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:03:54,542 - INFO - Processing data
+2022-11-29 15:03:55,774 - INFO - Title: Tiny molecular probes reveal invisible forces inside cells
+2022-11-29 15:03:55,774 - INFO - DOI: https://doi.org/10.25250/thescbr.brk611
+2022-11-29 15:03:56,123 - INFO - Image already downloaded, skipping
+2022-11-29 15:03:56,390 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:56] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:03:56,812 - INFO - Making LaTeX
+2022-11-29 15:03:56,819 - INFO - Compiling PDF
+2022-11-29 15:03:57,736 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:57] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:03:58,168 - INFO - Done compiling PDF, 0 errors
+2022-11-29 15:03:58,168 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:58] "[35m[1mPOST / HTTP/1.1[0m" 201 -
+2022-11-29 15:03:58,428 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:58] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:03:59,193 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:59] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:03:59,623 - INFO - 127.0.0.1 - - [29/Nov/2022 15:03:59] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:04:00,615 - INFO - 127.0.0.1 - - [29/Nov/2022 15:04:00] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:04:00,941 - INFO - 127.0.0.1 - - [29/Nov/2022 15:04:00] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:04:01,229 - INFO - 127.0.0.1 - - [29/Nov/2022 15:04:01] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:04:01,459 - INFO - 127.0.0.1 - - [29/Nov/2022 15:04:01] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:04:01,664 - INFO - 127.0.0.1 - - [29/Nov/2022 15:04:01] "GET /log HTTP/1.1" 200 -
+2022-11-29 15:17:45,379 - INFO - 127.0.0.1 - - [29/Nov/2022 15:17:45] "GET /log HTTP/1.1" 200 -
