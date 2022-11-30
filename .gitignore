@@ -3,7 +3,7 @@ __pycache__
 tmp
 flask_env
 .mypy_cache
-pdf/*
+*.pdf
 .env
 users.json
 *.log

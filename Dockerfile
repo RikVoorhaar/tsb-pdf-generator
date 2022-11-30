@@ -6,5 +6,5 @@ COPY app/requirements.txt .
 COPY app/tex-packages.txt .
 RUN pip3 install -r requirements.txt
 RUN cat tex-packages.txt | xargs tlmgr install
-ENTRYPOINT ["python3"]
-CMD ["app.py"]
+ENTRYPOINT ["waitress-serve"]
+CMD ["--host=0.0.0.0", "--port=8080", "app:app"]

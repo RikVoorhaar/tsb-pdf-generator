@@ -9,3 +9,4 @@ pycodestyle
 python-dotenv
 requests
 tqdm
+waitress
