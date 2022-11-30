@@ -1,6 +1,7 @@
 black
 flask
 flask_api
+flask_login
 jinja2
 natsort
 pandoc

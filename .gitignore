@@ -4,3 +4,7 @@ tmp
 flask_env
 .mypy_cache
 pdf/*
+.env
+users.json
+*.log
+*.pyc

@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  tsb:
+    image: tsb-pdf-generator:latest
+    container_name: tsb
+    restart: always
+    stdin_open: true
+    ports:
+      - 5000:5000
+    tty: true
+    networks:
+      - web
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tsb.rule=Host(`tsb.rikvoorhaar.com`)"
+    environment:
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+    volumes:
+      - "${PWD}/app:/app"
+      - "${PWD}/users.json:/app/users.json"
+
+networks:
+  web:
+    external: true
+  internal:
