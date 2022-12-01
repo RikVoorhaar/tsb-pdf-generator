@@ -15,13 +15,16 @@ os.environ["NO_COLOR"] = "true"
 
 app = Flask(__name__)
 app.config.update(
-    SERVER_NAME="tsb.rikvoorhaar.com",
+    SERVER_NAME=os.environ.get("FLASK_SERVER_NAME", "localhost"),
     SECRET_KEY=os.environ["FLASK_SECRET_KEY"],
 )
 
-
-with open("users.json") as f:
-    users = json.loads(f.read())
+users_file = "users.json"
+if not os.path.isfile(users_file):
+    users = {}
+else:
+    with open(users_file) as f:
+        users = json.loads(f.read())
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
@@ -137,4 +140,6 @@ def get_log():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0", port=os.environ["FLASK_HOST_PORT"]
+    )
