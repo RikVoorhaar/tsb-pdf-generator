@@ -36,6 +36,12 @@ logging.basicConfig(level=logging.INFO, filename=LOG_FILE, format=LOG_FORMAT)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+waitress_logger = logging.getLogger("waitress")
+waitress_logger.setLevel(logging.INFO)
+handler = logging.FileHandler(LOG_FILE)
+handler.setFormatter(logging.Formatter(LOG_FORMAT))
+waitress_logger.addHandler(handler)
+
 
 @app.route("/", methods=["POST", "GET"])
 def post_form():
@@ -70,6 +76,11 @@ def request_loader(request):
     user = User()
     user.id = email
     return user
+
+
+@app.route("/health", methods=["GET"])
+def health():
+    return "OK", status.HTTP_200_OK
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -140,6 +151,4 @@ def get_log():
 
 
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0", port=os.environ["FLASK_HOST_PORT"]
-    )
+    app.run(host="0.0.0.0", port=os.environ["FLASK_HOST_PORT"])

@@ -17,6 +17,8 @@ services:
       - "traefik.http.routers.tsb.rule=Host(`tsb.rikvoorhaar.com`)"
     environment:
       - FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+      - FLASK_HOST_PORT=${FLASK_HOST_PORT}
+      - FLASK_SERVER_NAME=${FLASK_SERVER_NAME}
     volumes:
       - "${PWD}/app:/app"
       - "${PWD}/users.json:/app/users.json"
@@ -24,4 +26,4 @@ services:
 networks:
   web:
     external: true
-  internal:
+  internal: 
