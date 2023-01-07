@@ -4,7 +4,9 @@ import json
 from tqdm import tqdm
 from pathlib import Path
 import logging
+import dotenv
 
+dotenv.load_dotenv()
 LOG_FILE = Path("json_downloader.log")
 logging.basicConfig(
     level=logging.DEBUG,
@@ -21,7 +23,7 @@ for art_id in tqdm(range(36, 4000)):
     if file_loc.exists():
         continue
     resp = requests.get(
-        f"https://thesciencebreaker.org/json/{art_id}?id=$2y$10$P75HCBUqXIO65SvfjKQ4vOg0vCzAiTAmWrZ2YtGhGMTIafOsfIo4e"
+        f"https://thesciencebreaker.org/json/{art_id}?id={dotenv.get('TSB_ID')}"
     )
 
     try:
